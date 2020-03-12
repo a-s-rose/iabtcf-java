@@ -1,4 +1,4 @@
-package com.iabtcf.decoder;
+package com.iabtcf.v2;
 
 /*-
  * #%L
@@ -20,16 +20,25 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import com.iabtcf.model.TCModel;
+public enum SegmentType {
+    DEFAULT,
+    DISCLOSED_VENDOR,
+    ALLOWED_VENDOR,
+    PUBLISHER_TC,
+    INVALID;
 
-/**
- * A Thread-safe binary decoder
- */
-public interface TCModelDecoder {
-
-    static TCModelDecoder instance() {
-        return new TCModelDecoderImpl();
+    public static SegmentType from(int id) {
+        switch (id) {
+            case 0:
+                return DEFAULT;
+            case 1:
+                return DISCLOSED_VENDOR;
+            case 2:
+                return ALLOWED_VENDOR;
+            case 3:
+                return PUBLISHER_TC;
+            default:
+                return INVALID;
+        }
     }
-
-    TCModel decode(String consentString);
 }

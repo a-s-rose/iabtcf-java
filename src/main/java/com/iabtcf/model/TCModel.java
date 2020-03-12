@@ -1,4 +1,4 @@
-package com.iabtcf.decoder;
+package com.iabtcf.model;
 
 /*-
  * #%L
@@ -20,16 +20,22 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import com.iabtcf.model.TCModel;
+import java.time.Instant;
 
-/**
- * A Thread-safe binary decoder
- */
-public interface TCModelDecoder {
+public interface TCModel {
 
-    static TCModelDecoder instance() {
-        return new TCModelDecoderImpl();
-    }
+    /**
+     * @return the version of consent string format
+     */
+    int version();
 
-    TCModel decode(String consentString);
+    /**
+     * @return the {@link Instant} at which the consent string was created
+     */
+    Instant consentRecordCreated();
+
+    /**
+     * @return the {@link Instant} at which consent string was last updated
+     */
+    Instant consentRecordLastUpdated();
 }

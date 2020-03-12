@@ -1,4 +1,4 @@
-package com.iabtcf.decoder;
+package com.iabtcf.utils;
 
 /*-
  * #%L
@@ -20,16 +20,23 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import com.iabtcf.model.TCModel;
+import java.time.Instant;
 
-/**
- * A Thread-safe binary decoder
- */
-public interface TCModelDecoder {
+import com.iabtcf.ByteBitVector;
+import com.iabtcf.FieldDefs;
 
-    static TCModelDecoder instance() {
-        return new TCModelDecoderImpl();
+public class ByteBitVectorUtils {
+
+    public static Instant deciSeconds(ByteBitVector bv, FieldDefs field) {
+        return Instant.ofEpochMilli(bv.readBits36(field.getOffset(bv)) * 100);
     }
 
-    TCModel decode(String consentString);
+    public static String readStr2(ByteBitVector bv, int offset) {
+        return String
+                .valueOf(new char[] {(char) ('A' + bv.readBits6(offset)), (char) ('A' + bv.readBits6(offset + 6))});
+    }
+
+    public static String readStr2(ByteBitVector bv, FieldDefs field) {
+        return readStr2(bv, field.getOffset(bv));
+    }
 }

@@ -1,4 +1,4 @@
-package com.iabtcf.decoder;
+package com.iabtcf.utils;
 
 /*-
  * #%L
@@ -20,16 +20,8 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import com.iabtcf.model.TCModel;
+import java.util.Iterator;
+import java.util.PrimitiveIterator.OfInt;
 
-/**
- * A Thread-safe binary decoder
- */
-public interface TCModelDecoder {
-
-    static TCModelDecoder instance() {
-        return new TCModelDecoderImpl();
-    }
-
-    TCModel decode(String consentString);
+public interface IntIterator extends Iterator<Integer>, OfInt {
 }

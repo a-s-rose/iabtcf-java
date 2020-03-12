@@ -1,4 +1,4 @@
-package com.iabtcf.decoder;
+package com.iabtcf.utils;
 
 /*-
  * #%L
@@ -20,16 +20,13 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import com.iabtcf.model.TCModel;
-
 /**
- * A Thread-safe binary decoder
+ * An int primitive memory optimized iterable.
  */
-public interface TCModelDecoder {
+public interface IntIterable extends Iterable<Integer> {
+    boolean contains(int value);
 
-    static TCModelDecoder instance() {
-        return new TCModelDecoderImpl();
-    }
+    boolean containsAll(int... source);
 
-    TCModel decode(String consentString);
+    IntIterator intIterator();
 }

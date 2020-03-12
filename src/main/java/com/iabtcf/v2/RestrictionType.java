@@ -1,4 +1,4 @@
-package com.iabtcf.decoder;
+package com.iabtcf.v2;
 
 /*-
  * #%L
@@ -20,16 +20,24 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import com.iabtcf.model.TCModel;
+public enum RestrictionType {
+    NOT_ALLOWED,
+    REQUIRE_CONSENT,
+    REQUIRE_LEGITIMATE_INTEREST,
+    UNDEFINED;
 
-/**
- * A Thread-safe binary decoder
- */
-public interface TCModelDecoder {
-
-    static TCModelDecoder instance() {
-        return new TCModelDecoderImpl();
+    public static RestrictionType from(int id) {
+        switch (id) {
+            case 0:
+                return NOT_ALLOWED;
+            case 1:
+                return REQUIRE_CONSENT;
+            case 2:
+                return REQUIRE_LEGITIMATE_INTEREST;
+            case 3:
+                return UNDEFINED;
+            default:
+                return NOT_ALLOWED;
+        }
     }
-
-    TCModel decode(String consentString);
 }
