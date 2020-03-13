@@ -22,6 +22,7 @@ package com.iabtcf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.BitSet;
 
 public class ByteBitVector {
@@ -289,5 +290,9 @@ public class ByteBitVector {
             buffer[startByte] &= ~mask;
             buffer[startByte] |= (byte) (value << (8 - 6 - bitPos));
         }
+    }
+
+    public byte[] getBytes() {
+        return Arrays.copyOf(buffer, buffer.length);
     }
 }

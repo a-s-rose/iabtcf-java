@@ -19,10 +19,16 @@ package com.iabtcf.decoder;
  * limitations under the License.
  * #L%
  */
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 import java.util.Base64;
 
+import com.iabtcf.model.TCModel;
+import com.iabtcf.v1.BitVectorTCModelV1;
+import com.iabtcf.v2.BitVectorTCModelV2;
 import org.junit.Test;
 
 public class TCModelDecoderImplTest {
@@ -38,6 +44,22 @@ public class TCModelDecoderImplTest {
     public void testCanCreateModelOnePartString() {
         String tcString = "COtybn4PA_zT4KjACBENAPCIAEBAAECAAIAAAAAAAAAA";
         assertNotNull(TCModelDecoder.instance().decode(tcString));
+    }
+
+    @Test
+    public void testCanCreateModelV2() {
+        String tcString = "COtybn4PA_zT4KjACBENAPCIAEBAAECAAIAAAAAAAAAA";
+        final TCModel tcModel = TCModelDecoder.instance().decode(tcString);
+        assertThat(tcModel.version(), is(2));
+        assertThat(tcModel, instanceOf(BitVectorTCModelV2.class));
+    }
+
+    @Test
+    public void testCanCreateModelV1() {
+        String tcString = "BObdrPUOevsguAfDqFENCNAAAAAmeAAA";
+        final TCModel tcModel = TCModelDecoder.instance().decode(tcString);
+        assertThat(tcModel.version(), is(1));
+        assertThat(tcModel, instanceOf(BitVectorTCModelV1.class));
     }
 
     @Test(expected = UnsupportedOperationException.class)

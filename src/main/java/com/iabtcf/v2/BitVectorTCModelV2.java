@@ -112,6 +112,14 @@ public class BitVectorTCModelV2 implements TCModelV2 {
         return new BitVectorTCModelV2(coreBitVector, remainingVectors);
     }
 
+    public ByteBitVector getCoreBitVector() {
+        return bbv;
+    }
+
+    public Collection<ByteBitVector> getRemainingVectors() {
+        return remainingVectors;
+    }
+
     private ByteBitVector getSegment(SegmentType segmentType) {
         if (segmentType == SegmentType.DEFAULT) {
             return bbv;

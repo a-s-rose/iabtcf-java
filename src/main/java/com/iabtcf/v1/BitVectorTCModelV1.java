@@ -31,6 +31,8 @@ import java.util.stream.IntStream;
 
 import com.iabtcf.ByteBitVector;
 import com.iabtcf.FieldDefs;
+import com.iabtcf.model.TCModel;
+import com.iabtcf.v2.BitVectorTCModelV2;
 
 public class BitVectorTCModelV1 implements TCModelV1 {
 
@@ -42,6 +44,10 @@ public class BitVectorTCModelV1 implements TCModelV1 {
 
     public static BitVectorTCModelV1 fromBitVector(ByteBitVector bitVector) {
         return new BitVectorTCModelV1(bitVector);
+    }
+
+    public static ByteBitVector toBitVector(BitVectorTCModelV1 tcModel) {
+        return tcModel.bitVector;
     }
 
     @Override
