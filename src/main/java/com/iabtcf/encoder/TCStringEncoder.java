@@ -21,38 +21,41 @@ package com.iabtcf.encoder;
  */
 
 import com.iabtcf.ByteBitVector;
-import com.iabtcf.model.TCModel;
-import com.iabtcf.v1.BitVectorTCModelV1;
-import com.iabtcf.v2.BitVectorTCModelV2;
+import com.iabtcf.decoder.TCString;
+import com.iabtcf.decoder.TCStringV1;
+import com.iabtcf.decoder.TCStringV2;
 
 import java.util.Base64;
 
-public class TCModelEncoderImpl implements TCModelEncoder {
-    @Override
-    public String encode(TCModel tcModel) {
-        switch (tcModel.version()) {
+class TCStringEncoder {
+
+    public static String encode(TCString tcString) {
+        switch (tcString.getVersion()) {
             case 1:
-                return stringFromVector(BitVectorTCModelV1.toBitVector((BitVectorTCModelV1) tcModel));
+                TCStringV1 v1 = (TCStringV1) tcString;
+                return stringFromVector(TCStringV1.toBitVector(v1));
             case 2:
-                BitVectorTCModelV2 tcModelV2 = (BitVectorTCModelV2) tcModel;
-                final ByteBitVector coreTc = tcModelV2.getCoreBitVector();
+                TCStringV2 v2 = (TCStringV2) tcString;
+
+                final ByteBitVector coreTc = v2.getCoreBitVector();
 
                 StringBuilder builder = new StringBuilder();
                 builder.append(stringFromVector(coreTc));
-                if (!tcModelV2.getRemainingVectors().isEmpty()) {
-                    for (ByteBitVector remainingVector : tcModelV2.getRemainingVectors()) {
+                if (!v2.getRemainingVectors().isEmpty()) {
+                    for (ByteBitVector remainingVector : v2.getRemainingVectors()) {
                         builder.append(".");
                         builder.append(stringFromVector(remainingVector));
                     }
                 }
                 return builder.toString();
             default:
-                throw new UnsupportedOperationException("Version " + tcModel.version() + "is unsupported yet");
+                throw new UnsupportedOperationException("Version " + tcString.getVersion() + "is unsupported yet");
         }
     }
 
-    private String stringFromVector(ByteBitVector byteBitVector) {
+    static String stringFromVector(ByteBitVector byteBitVector) {
         final byte[] encoded = Base64.getUrlEncoder().encode(byteBitVector.getBytes());
         return new String(encoded);
     }
+
 }

@@ -69,7 +69,7 @@ import static com.iabtcf.FieldDefs.PPTC_CUSTOM_PURPOSES_LI_TRANSPARENCY;
 import static com.iabtcf.FieldDefs.PPTC_PUB_PURPOSES_CONSENT;
 import static com.iabtcf.FieldDefs.PPTC_PUB_PURPOSES_LI_TRANSPARENCY;
 
-class TCStringV2 implements TCString {
+public class TCStringV2 implements TCString {
 
     private int version;
     private Instant consentRecordCreated;
@@ -112,6 +112,14 @@ class TCStringV2 implements TCString {
 
     public static TCStringV2 fromBitVector(ByteBitVector coreBitVector, ByteBitVector... remainingVectors) {
         return new TCStringV2(coreBitVector, remainingVectors);
+    }
+
+    public ByteBitVector getCoreBitVector() {
+        return bbv;
+    }
+
+    public Collection<ByteBitVector> getRemainingVectors() {
+        return remainingVectors;
     }
 
     private ByteBitVector getSegment(SegmentType segmentType) {

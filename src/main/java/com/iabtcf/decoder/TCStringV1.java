@@ -44,7 +44,7 @@ import static com.iabtcf.FieldDefs.V1_VERSION;
 import static com.iabtcf.utils.ByteBitVectorUtils.deciSeconds;
 import static com.iabtcf.utils.ByteBitVectorUtils.readStr2;
 
-class TCStringV1 implements TCString {
+public class TCStringV1 implements TCString {
 
     private final ByteBitVector bbv;
 
@@ -54,6 +54,10 @@ class TCStringV1 implements TCString {
 
     public static TCStringV1 fromBitVector(ByteBitVector bitVector) {
         return new TCStringV1(bitVector);
+    }
+
+    public static ByteBitVector toBitVector(TCStringV1 tcString) {
+        return new ByteBitVector(tcString.bbv.getBytes());
     }
 
     @Override

@@ -21,7 +21,6 @@ package com.iabtcf.encoder;
  */
 
 import com.iabtcf.ByteBitVector;
-import com.iabtcf.decoder.TCModelDecoder;
 import com.iabtcf.model.TCModel;
 import com.iabtcf.v1.BitVectorTCModelV1;
 import com.iabtcf.v2.BitVectorTCModelV2;
@@ -33,8 +32,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class TCModelEncoderImplTest {
-
-    // FIXME: create TCModel without using Decoder!
 
     @Test
     public void testEncodeModelV1() {

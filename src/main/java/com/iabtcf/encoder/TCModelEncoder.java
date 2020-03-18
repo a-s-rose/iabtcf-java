@@ -33,5 +33,11 @@ public interface TCModelEncoder {
         return new TCModelEncoderImpl();
     }
 
+    /**
+     * Encodes the given tc model to a TC String.
+     *
+     * @param tcModel a tc model, not null
+     * @return a TC String V1 or V2 depending on the underlying model.
+     */
     String encode(TCModel tcModel);
 }
