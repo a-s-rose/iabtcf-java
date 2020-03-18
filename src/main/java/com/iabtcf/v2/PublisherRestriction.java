@@ -20,11 +20,11 @@ package com.iabtcf.v2;
  * #L%
  */
 
-import java.util.Objects;
-import java.util.StringJoiner;
-
 import com.iabtcf.utils.IntIterable;
 import com.iabtcf.utils.IntIterator;
+
+import java.util.Objects;
+import java.util.StringJoiner;
 
 public class PublisherRestriction {
 

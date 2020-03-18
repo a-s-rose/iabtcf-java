@@ -20,8 +20,8 @@ package com.iabtcf.v1;
  * #L%
  */
 
-import static com.iabtcf.utils.ByteBitVectorUtils.deciSeconds;
-import static com.iabtcf.utils.ByteBitVectorUtils.readStr2;
+import com.iabtcf.ByteBitVector;
+import com.iabtcf.FieldDefs;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -29,10 +29,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.iabtcf.ByteBitVector;
-import com.iabtcf.FieldDefs;
-import com.iabtcf.model.TCModel;
-import com.iabtcf.v2.BitVectorTCModelV2;
+import static com.iabtcf.utils.ByteBitVectorUtils.deciSeconds;
+import static com.iabtcf.utils.ByteBitVectorUtils.readStr2;
 
 public class BitVectorTCModelV1 implements TCModelV1 {
 

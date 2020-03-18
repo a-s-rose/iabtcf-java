@@ -20,11 +20,11 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import java.time.Instant;
-import java.util.List;
-
 import com.iabtcf.utils.IntIterable;
 import com.iabtcf.v2.PublisherRestriction;
+
+import java.time.Instant;
+import java.util.List;
 
 public interface TCString {
     static TCString decode(String consentString) {

@@ -19,11 +19,12 @@ package com.iabtcf.decoder;
  * limitations under the License.
  * #L%
  */
-import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 import java.util.Base64;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
 public class TCStringDecoderTest {
 

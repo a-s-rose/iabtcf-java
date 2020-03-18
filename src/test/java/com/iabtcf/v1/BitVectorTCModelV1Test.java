@@ -19,6 +19,17 @@ package com.iabtcf.v1;
  * #L%
  */
 
+import com.iabtcf.decoder.TCModelDecoder;
+import com.iabtcf.model.TCModel;
+import org.junit.Test;
+
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static com.iabtcf.v1.Purpose.AD_SELECTION;
 import static com.iabtcf.v1.Purpose.CONTENT_DELIVERY;
 import static com.iabtcf.v1.Purpose.MEASUREMENT;
@@ -30,18 +41,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import org.junit.Test;
-
-import com.iabtcf.decoder.TCModelDecoder;
-import com.iabtcf.model.TCModel;
 
 public class BitVectorTCModelV1Test {
 

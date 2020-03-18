@@ -20,10 +20,10 @@ package com.iabtcf.utils;
  * #L%
  */
 
-import java.time.Instant;
-
 import com.iabtcf.ByteBitVector;
 import com.iabtcf.FieldDefs;
+
+import java.time.Instant;
 
 public class ByteBitVectorUtils {
 

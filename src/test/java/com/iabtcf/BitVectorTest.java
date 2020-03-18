@@ -20,17 +20,16 @@ package com.iabtcf;
  * #L%
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.iabtcf.utils.ByteBitVectorUtils;
+import org.junit.Test;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.Test;
-
-import com.iabtcf.utils.ByteBitVectorUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @Deprecated
 public class BitVectorTest {

@@ -19,6 +19,13 @@ package com.iabtcf.decoder;
  * #L%
  */
 
+import org.junit.Test;
+
+import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static com.iabtcf.test.utils.IntIterableMatcher.matchInts;
 import static com.iabtcf.v1.Purpose.AD_SELECTION;
 import static com.iabtcf.v1.Purpose.CONTENT_DELIVERY;
@@ -29,13 +36,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import java.time.Instant;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import org.junit.Test;
 
 public class TCStringV1Test {
 

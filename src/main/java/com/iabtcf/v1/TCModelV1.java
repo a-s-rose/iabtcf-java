@@ -20,9 +20,9 @@ package com.iabtcf.v1;
  * #L%
  */
 
-import java.util.Set;
-
 import com.iabtcf.model.TCModel;
+
+import java.util.Set;
 
 public interface TCModelV1 extends TCModel {
 

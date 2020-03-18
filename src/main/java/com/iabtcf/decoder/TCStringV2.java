@@ -20,6 +20,23 @@ package com.iabtcf.decoder;
  * #L%
  */
 
+import com.iabtcf.ByteBitVector;
+import com.iabtcf.FieldDefs;
+import com.iabtcf.utils.BitSetIntIterable;
+import com.iabtcf.utils.ByteBitVectorUtils;
+import com.iabtcf.utils.IntIterable;
+import com.iabtcf.v2.PublisherRestriction;
+import com.iabtcf.v2.RestrictionType;
+import com.iabtcf.v2.SegmentType;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+
 import static com.iabtcf.FieldDefs.AV_MAX_VENDOR_ID;
 import static com.iabtcf.FieldDefs.AV_VENDOR_BITRANGE_FIELD;
 import static com.iabtcf.FieldDefs.CORE_CMP_ID;
@@ -51,23 +68,6 @@ import static com.iabtcf.FieldDefs.PPTC_CUSTOM_PURPOSES_CONSENT;
 import static com.iabtcf.FieldDefs.PPTC_CUSTOM_PURPOSES_LI_TRANSPARENCY;
 import static com.iabtcf.FieldDefs.PPTC_PUB_PURPOSES_CONSENT;
 import static com.iabtcf.FieldDefs.PPTC_PUB_PURPOSES_LI_TRANSPARENCY;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-
-import com.iabtcf.ByteBitVector;
-import com.iabtcf.FieldDefs;
-import com.iabtcf.utils.BitSetIntIterable;
-import com.iabtcf.utils.ByteBitVectorUtils;
-import com.iabtcf.utils.IntIterable;
-import com.iabtcf.v2.PublisherRestriction;
-import com.iabtcf.v2.RestrictionType;
-import com.iabtcf.v2.SegmentType;
 
 class TCStringV2 implements TCString {
 

@@ -20,13 +20,13 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import java.util.Base64;
-
 import com.iabtcf.ByteBitVector;
 import com.iabtcf.FieldDefs;
 import com.iabtcf.model.TCModel;
 import com.iabtcf.v1.BitVectorTCModelV1;
 import com.iabtcf.v2.BitVectorTCModelV2;
+
+import java.util.Base64;
 
 public class TCModelDecoderImpl implements TCModelDecoder {
     @Override

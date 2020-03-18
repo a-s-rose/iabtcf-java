@@ -19,17 +19,18 @@ package com.iabtcf.decoder;
  * limitations under the License.
  * #L%
  */
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-
-import java.util.Base64;
 
 import com.iabtcf.model.TCModel;
 import com.iabtcf.v1.BitVectorTCModelV1;
 import com.iabtcf.v2.BitVectorTCModelV2;
 import org.junit.Test;
+
+import java.util.Base64;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 public class TCModelDecoderImplTest {
 

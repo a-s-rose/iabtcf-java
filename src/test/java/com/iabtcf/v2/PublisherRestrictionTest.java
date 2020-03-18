@@ -19,15 +19,15 @@ package com.iabtcf.v2;
  * limitations under the License.
  * #L%
  */
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.util.BitSet;
-
-import org.junit.Test;
 
 import com.iabtcf.utils.BitSetIntIterable;
 import com.iabtcf.utils.IntIterable;
+import org.junit.Test;
+
+import java.util.BitSet;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class PublisherRestrictionTest {
     public static IntIterable wrap(int... values) {

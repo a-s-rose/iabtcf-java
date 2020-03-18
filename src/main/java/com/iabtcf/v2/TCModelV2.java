@@ -20,10 +20,10 @@ package com.iabtcf.v2;
  * #L%
  */
 
-import java.util.List;
-
 import com.iabtcf.model.TCModel;
 import com.iabtcf.utils.IntIterable;
+
+import java.util.List;
 
 public interface TCModelV2 extends TCModel {
     /**

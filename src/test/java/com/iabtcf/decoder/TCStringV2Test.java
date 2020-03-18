@@ -19,11 +19,12 @@ package com.iabtcf.decoder;
  * limitations under the License.
  * #L%
  */
-import static com.iabtcf.test.utils.IntIterableMatcher.matchInts;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+
+import com.iabtcf.utils.BitSetIntIterable;
+import com.iabtcf.utils.IntIterableUtils;
+import com.iabtcf.v2.PublisherRestriction;
+import com.iabtcf.v2.RestrictionType;
+import org.junit.Test;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -31,12 +32,11 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.iabtcf.utils.BitSetIntIterable;
-import com.iabtcf.utils.IntIterableUtils;
-import com.iabtcf.v2.PublisherRestriction;
-import com.iabtcf.v2.RestrictionType;
+import static com.iabtcf.test.utils.IntIterableMatcher.matchInts;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class TCStringV2Test {
     private static TCString parse(String consentString) {

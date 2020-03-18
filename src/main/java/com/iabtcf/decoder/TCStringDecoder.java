@@ -20,10 +20,10 @@ package com.iabtcf.decoder;
  * #L%
  */
 
-import java.util.Base64;
-
 import com.iabtcf.ByteBitVector;
 import com.iabtcf.FieldDefs;
+
+import java.util.Base64;
 
 class TCStringDecoder {
     static ByteBitVector vectorFromString(String base64UrlEncodedString) {

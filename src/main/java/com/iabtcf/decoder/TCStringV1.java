@@ -20,6 +20,16 @@ package com.iabtcf.decoder;
  * #L%
  */
 
+import com.iabtcf.ByteBitVector;
+import com.iabtcf.FieldDefs;
+import com.iabtcf.utils.BitSetIntIterable;
+import com.iabtcf.utils.IntIterable;
+import com.iabtcf.v2.PublisherRestriction;
+
+import java.time.Instant;
+import java.util.BitSet;
+import java.util.List;
+
 import static com.iabtcf.FieldDefs.V1_CMP_ID;
 import static com.iabtcf.FieldDefs.V1_CMP_VERSION;
 import static com.iabtcf.FieldDefs.V1_CONSENT_LANGUAGE;
@@ -33,16 +43,6 @@ import static com.iabtcf.FieldDefs.V1_VENDOR_MAX_VENDOR_ID;
 import static com.iabtcf.FieldDefs.V1_VERSION;
 import static com.iabtcf.utils.ByteBitVectorUtils.deciSeconds;
 import static com.iabtcf.utils.ByteBitVectorUtils.readStr2;
-
-import java.time.Instant;
-import java.util.BitSet;
-import java.util.List;
-
-import com.iabtcf.ByteBitVector;
-import com.iabtcf.FieldDefs;
-import com.iabtcf.utils.BitSetIntIterable;
-import com.iabtcf.utils.IntIterable;
-import com.iabtcf.v2.PublisherRestriction;
 
 class TCStringV1 implements TCString {
 

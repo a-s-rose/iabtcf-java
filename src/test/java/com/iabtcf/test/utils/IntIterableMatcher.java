@@ -20,15 +20,14 @@ package com.iabtcf.test.utils;
  * #L%
  */
 
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.iabtcf.utils.IntIterable;
+import com.iabtcf.utils.IntIterableUtils;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-import com.iabtcf.utils.IntIterable;
-import com.iabtcf.utils.IntIterableUtils;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class IntIterableMatcher extends BaseMatcher<IntIterable> {
 

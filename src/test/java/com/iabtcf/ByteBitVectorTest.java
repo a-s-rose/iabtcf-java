@@ -20,9 +20,7 @@ package com.iabtcf;
  * #L%
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
@@ -33,7 +31,9 @@ import java.util.Base64;
 import java.util.BitSet;
 import java.util.Random;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ByteBitVectorTest {
     Random r = new Random();
