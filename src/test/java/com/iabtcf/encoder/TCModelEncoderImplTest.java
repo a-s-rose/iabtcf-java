@@ -20,9 +20,14 @@ package com.iabtcf.encoder;
  * #L%
  */
 
+import com.iabtcf.ByteBitVector;
 import com.iabtcf.decoder.TCModelDecoder;
 import com.iabtcf.model.TCModel;
+import com.iabtcf.v1.BitVectorTCModelV1;
+import com.iabtcf.v2.BitVectorTCModelV2;
 import org.junit.Test;
+
+import java.util.Base64;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,39 +38,35 @@ public class TCModelEncoderImplTest {
 
     @Test
     public void testEncodeModelV1() {
-        String tcString = "BObdrPUOevsguAfDqFENCNAAAAAmeAAA";
-        final TCModel tcModel = TCModelDecoder.instance().decode(tcString);
+        final TCModel tcModel = BitVectorTCModelV1.fromBitVector(getByteVector("BObdrPUOevsguAfDqFENCNAAAAAmeAAA"));
 
         String result = TCModelEncoder.instance().encode(tcModel);
-        assertThat(result, is(tcString));
+        assertThat(result, is("BObdrPUOevsguAfDqFENCNAAAAAmeAAA"));
     }
 
     @Test
     public void testEncodeModelV2() {
-        String tcString = "COtybn4PA_zT4KjACBENAPCIAEBAAECAAIAAAAAAAAAA";
-        final TCModel tcModel = TCModelDecoder.instance().decode(tcString);
+        String core = "COtybn4PA_zT4KjACBENAPCIAEBAAECAAIAAAAAAAAAA";
+        final TCModel tcModel = BitVectorTCModelV2.fromBitVector(getByteVector(core));
 
         String result = TCModelEncoder.instance().encode(tcModel);
-        assertThat(result, is(tcString));
+        assertThat(result, is(core));
     }
 
     @Test
     public void testCanEncodeFromModelWithRemainingParts() {
-        String tcString =
-                "COtybn4PA_zT4KjACBENAPCIAEBAAECAAIAAAAAAAAAA.IFoEUQQgAIQwgIwQABAEAAAAOIAACAIAAAAQAIAgEAACEAAAAAgAQBAAAAAAAGBAAgAAAAAAAFAAECAAAgAAQARAEQAAAAAJAAIAAgAAAYQEAAAQmAgBC3ZAYzUw";
-        final TCModel tcModel = TCModelDecoder.instance().decode(tcString);
+        String core = "COtybn4PA_zT4KjACBENAPCIAEBAAECAAIAAAAAAAAAA";
+        String remaining = "IFoEUQQgAIQwgIwQABAEAAAAOIAACAIAAAAQAIAgEAACEAAAAAgAQBAAAAAAAGBAAgAAAAAAAFAAECAAAgAAQARAEQAAAAAJAAIAAgAAAYQEAAAQmAgBC3ZAYzUw";
+        String tcString = core + "." + remaining;
+
+        final TCModel tcModel = BitVectorTCModelV2.fromBitVector(getByteVector(core), getByteVector(remaining));
 
         String result = TCModelEncoder.instance().encode(tcModel);
         assertThat(result, is(tcString));
     }
 
-    @Test
-    public void testCanEncodeFromModelOnlyCore() {
-        String tcString = "COtybn4PA_zT4KjACBENAPCIAEBAAECAAIAAAAAAAAAA";
-        final TCModel tcModel = TCModelDecoder.instance().decode(tcString);
-
-        String result = TCModelEncoder.instance().encode(tcModel);
-        assertThat(result, is(tcString));
+    private ByteBitVector getByteVector(String str) {
+        return new ByteBitVector(Base64.getUrlDecoder().decode(str));
     }
 
 }
