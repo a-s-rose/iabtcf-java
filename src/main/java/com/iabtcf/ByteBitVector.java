@@ -22,6 +22,7 @@ package com.iabtcf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.BitSet;
 
@@ -295,4 +296,20 @@ public class ByteBitVector {
     public byte[] getBytes() {
         return Arrays.copyOf(buffer, buffer.length);
     }
+
+    public void writeInstant(FieldDefs field, Instant instant) {
+        writeBits36(field, instant.toEpochMilli() / 100);
+    }
+
+    public void writeBits36(FieldDefs field, long longValue) {
+        assert field.getLength(this) == 36;
+        writeBits36(field.getOffset(this), longValue);
+    }
+
+    private void writeBits36(int offset, long value) {
+        assert value > 0 && value < 36;
+
+        // TODO
+    }
+
 }

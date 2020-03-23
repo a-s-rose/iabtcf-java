@@ -199,6 +199,7 @@ public enum FieldDefs {
         return getLength(bbv) + getOffset(bbv);
     }
 
+
     /**
      * The offset of the nth field depends on the length and offset of the nth-1 field. This class
      * is used to cache static fields to avoid querying parent fields.

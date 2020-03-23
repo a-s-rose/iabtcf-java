@@ -48,7 +48,7 @@ public class TCStringV1 implements TCString {
 
     private final ByteBitVector bbv;
 
-    private TCStringV1(ByteBitVector bitVector) {
+    protected TCStringV1(ByteBitVector bitVector) {
         this.bbv = bitVector;
     }
 

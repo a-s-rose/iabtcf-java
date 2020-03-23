@@ -105,7 +105,7 @@ public class TCStringV2 implements TCString {
         this(bbv, new ByteBitVector[] {});
     }
 
-    private TCStringV2(ByteBitVector bbv, ByteBitVector... theRest) {
+    protected TCStringV2(ByteBitVector bbv, ByteBitVector... theRest) {
         this.bbv = bbv;
         this.remainingVectors = Arrays.asList(theRest);
     }
