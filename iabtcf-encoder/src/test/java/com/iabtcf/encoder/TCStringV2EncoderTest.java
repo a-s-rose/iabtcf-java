@@ -1,5 +1,8 @@
 package com.iabtcf.encoder;
 
+import static com.iabtcf.encoder.utils.TestUtils.toDeci;
+import static com.iabtcf.test.utils.IntIterableMatcher.matchInts;
+
 /*-
  * #%L
  * IAB TCF Core Library
@@ -23,41 +26,41 @@ package com.iabtcf.encoder;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static com.iabtcf.encoder.utils.IntIterableMatcher.matchInts;
-import static com.iabtcf.encoder.utils.TestUtils.toDeci;
-import com.iabtcf.decoder.TCString;
-import com.iabtcf.utils.BitSetIntIterable;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.iabtcf.decoder.TCString;
+import com.iabtcf.utils.BitSetIntIterable;
+
 public class TCStringV2EncoderTest {
 
-    private Instant created = Instant.now();
-    private Instant updated = created.plus(1, ChronoUnit.HOURS);
+    private final Instant created = Instant.now();
+    private final Instant updated = created.plus(1, ChronoUnit.HOURS);
 
-    private TCStringEncoder encoderBuilder = TCStringEncoder.newBuilder()
-            .withVersion(2)
-            .withCreated(created)
-            .withLastUpdated(updated)
-            .withCmpId(1)
-            .withCmpVersion(12)
-            .withConsentScreen(1)
-            .withConsentLanguage("FR")
-            .withVendorListVersion(2)
-            .withTcfPolicyVersion(1)
-            .withIsServiceSpecific(true)
-            .withUseNonStandardStacks(false)
-            .withSpecialFeatureOptIns(BitSetIntIterable.of(1, 2))
-            .withPurposesConsent(BitSetIntIterable.of(4, 8))
-            .withPurposesLITransparency(BitSetIntIterable.of(11, 20))
-            .withPurposeOneTreatment(true)
-            .withPublisherCC("DE")
-            .withVendorsConsent(BitSetIntIterable.of(1, 4))
-            .withVendorLegitimateInterest(BitSetIntIterable.of(2, 6));
+    private final TCStringEncoder encoderBuilder = TCStringEncoder.newBuilder()
+        .withVersion(2)
+        .withCreated(created)
+        .withLastUpdated(updated)
+        .withCmpId(1)
+        .withCmpVersion(12)
+        .withConsentScreen(1)
+        .withConsentLanguage("FR")
+        .withVendorListVersion(2)
+        .withTcfPolicyVersion(1)
+        .withIsServiceSpecific(true)
+        .withUseNonStandardStacks(false)
+        .withSpecialFeatureOptIns(BitSetIntIterable.of(1, 2))
+        .withPurposesConsent(BitSetIntIterable.of(4, 8))
+        .withPurposesLITransparency(BitSetIntIterable.of(11, 20))
+        .withPurposeOneTreatment(true)
+        .withPublisherCC("DE")
+        .withVendorsConsent(BitSetIntIterable.of(1, 4))
+        .withVendorLegitimateInterest(BitSetIntIterable.of(2, 6));
+
     @Test
     public void testItConstructsCoreString() {
         String tcf = TCStringEncoder.newBuilder(encoderBuilder)
-                .toTCFFormat();
+            .toTCFFormat();
 
         TCString decoded = TCString.decode(tcf);
 
@@ -85,14 +88,14 @@ public class TCStringV2EncoderTest {
     @Test
     public void testItDecodesAllOptionalSegments() {
         String tcf = TCStringEncoder.newBuilder(encoderBuilder)
-                    .withDisclosedVendors(BitSetIntIterable.of(1, 2))
-                    .withAllowedVendors(BitSetIntIterable.of(6, 11))
-                    .withPubPurposesConsent(BitSetIntIterable.of(7, 9))
-                    .withPubPurposesLITransparency(BitSetIntIterable.of(2, 3))
-                    .withNumberOfCustomPurposesConsent(4)
-                    .withCustomPurposesConsent(BitSetIntIterable.of(1, 2, 4))
-                    .withCustomPurposesLITransparency(BitSetIntIterable.of(1, 3, 4))
-                    .toTCFFormat();
+            .withDisclosedVendors(BitSetIntIterable.of(1, 2))
+            .withAllowedVendors(BitSetIntIterable.of(6, 11))
+            .withPubPurposesConsent(BitSetIntIterable.of(7, 9))
+            .withPubPurposesLITransparency(BitSetIntIterable.of(2, 3))
+            .withNumberOfCustomPurposesConsent(4)
+            .withCustomPurposesConsent(BitSetIntIterable.of(1, 2, 4))
+            .withCustomPurposesLITransparency(BitSetIntIterable.of(1, 3, 4))
+            .toTCFFormat();
 
         TCString decoded = TCString.decode(tcf);
 
@@ -107,8 +110,8 @@ public class TCStringV2EncoderTest {
     @Test
     public void testEncodedVendorDisclosedSection() {
         String tcf = TCStringEncoder.newBuilder(encoderBuilder)
-                .withDisclosedVendors(BitSetIntIterable.of(1, 2))
-                .toTCFFormat();
+            .withDisclosedVendors(BitSetIntIterable.of(1, 2))
+            .toTCFFormat();
 
         TCString decoded = TCString.decode(tcf);
         Assert.assertEquals(2, tcf.split("\\.").length);
@@ -118,16 +121,25 @@ public class TCStringV2EncoderTest {
     @Test(expected = IllegalArgumentException.class)
     public void testShouldFailIfLongStringIsProvided() {
         TCStringEncoder.newBuilder(encoderBuilder)
-                .withConsentLanguage("GBR")
-                .toTCFFormat();
+            .withConsentLanguage("GBR")
+            .toTCFFormat();
 
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testShouldFailIfLowercaseStringIsProvided() {
         TCStringEncoder.newBuilder(encoderBuilder)
-                .withConsentLanguage("gb")
-                .toTCFFormat();
+        .withConsentLanguage("gb")
+        .toTCFFormat();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidVersion0() {
+        TCStringEncoder.newBuilder(encoderBuilder).withVersion(0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidVersion3() {
+        TCStringEncoder.newBuilder(encoderBuilder).withVersion(3);
+    }
 }

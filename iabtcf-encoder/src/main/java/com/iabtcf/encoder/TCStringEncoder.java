@@ -21,14 +21,11 @@ package com.iabtcf.encoder;
  */
 
 import java.time.Instant;
-import java.util.BitSet;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.iabtcf.utils.IntIterable;
-import com.iabtcf.utils.IntIterableUtils;
-import com.iabtcf.utils.IntIterator;
 import com.iabtcf.v2.SegmentType;
 
 public class TCStringEncoder {
@@ -58,8 +55,6 @@ public class TCStringEncoder {
     private IntIterable customPurposesConsent;
     private IntIterable customPurposesLITransparency;
     private IntIterable pubPurposesLITransparency;
-
-    private static final BitSet EMPTY_BIT_SET = new BitSet();
 
     private TCStringEncoder() {
 
@@ -237,27 +232,27 @@ public class TCStringEncoder {
     public String toTCFFormat() {
         if (this.version == 1) {
             return encodeVersion1();
-        } else if (this.version == 2) {
-            return Stream.of(encodeCoreString(), encodeDisclosedVendors(),
-                    encodeAllowedVendors(), encodePubPurposesConsent())
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.joining("."));
-
         }
-        throw new UnsupportedOperationException(this.version + " is unsupported");
+
+        assert (this.version == 2);
+
+        return Stream
+            .of(encodeCoreString(), encodeDisclosedVendors(), encodeAllowedVendors(), encodePubPurposesConsent())
+            .filter(Objects::nonNull)
+            .collect(Collectors.joining("."));
     }
 
     private String encodeVersion1() {
         BitWriter bitWriter = new BitWriter();
         bitWriter.write(this.version, 6); // version
-        bitWriter.writeInstant(this.created);
-        bitWriter.writeInstant(this.updated);
+        bitWriter.write(this.created);
+        bitWriter.write(this.updated);
         bitWriter.write(this.cmpId, 12);
         bitWriter.write(this.cmpVersion, 12);
         bitWriter.write(this.consentScreen, 6);
-        bitWriter.writeStr(this.consentLanguage);
+        bitWriter.write(this.consentLanguage);
         bitWriter.write(this.vendorListVersion, 12);
-        bitWriter.write(bitSet(this.purposesConsent), 24);
+        bitWriter.write(this.purposesConsent, 24);
         writeBitField(bitWriter, this.vendorsConsent);
         return bitWriter.toBase64();
     }
@@ -265,28 +260,28 @@ public class TCStringEncoder {
     private void writeBitField(BitWriter bitWriter, IntIterable intIterable) {
         int max = max(intIterable);
         bitWriter.write(max, 16);
-        bitWriter.writeBit(false); // bit field encoding
-        bitWriter.write(bitSet(intIterable), max);
+        bitWriter.write(false); // bit field encoding
+        bitWriter.write(intIterable, max);
     }
 
     private String encodeCoreString() {
         BitWriter bitWriter = new BitWriter();
         bitWriter.write(this.version, 6); // version
-        bitWriter.writeInstant(this.created);
-        bitWriter.writeInstant(this.updated);
+        bitWriter.write(this.created);
+        bitWriter.write(this.updated);
         bitWriter.write(this.cmpId, 12);
         bitWriter.write(this.cmpVersion, 12);
         bitWriter.write(this.consentScreen, 6);
-        bitWriter.writeStr(this.consentLanguage);
+        bitWriter.write(this.consentLanguage);
         bitWriter.write(this.vendorListVersion, 12);
         bitWriter.write(this.tcfPolicyVersion, 6);
-        bitWriter.writeBit(this.isServiceSpecific);
-        bitWriter.writeBit(this.useNonStandardStacks);
-        bitWriter.write(bitSet(this.specialFeatureOptIns), 12);
-        bitWriter.write(bitSet(this.purposesConsent), 24);
-        bitWriter.write(bitSet(this.purposesLITransparency), 24);
-        bitWriter.writeBit(this.purposeOneTreatment);
-        bitWriter.writeStr(this.publisherCC);
+        bitWriter.write(this.isServiceSpecific);
+        bitWriter.write(this.useNonStandardStacks);
+        bitWriter.write(this.specialFeatureOptIns, 12);
+        bitWriter.write(this.purposesConsent, 24);
+        bitWriter.write(this.purposesLITransparency, 24);
+        bitWriter.write(this.purposeOneTreatment);
+        bitWriter.write(this.publisherCC);
         writeBitField(bitWriter, this.vendorsConsent);
         writeBitField(bitWriter, this.vendorLegitimateInterest);
         return bitWriter.toBase64();
@@ -316,29 +311,16 @@ public class TCStringEncoder {
         }
         BitWriter bitWriter = new BitWriter();
         bitWriter.write(SegmentType.PUBLISHER_TC.value(), 3);
-        bitWriter.write(bitSet(this.pubPurposesConsent), 24);
-        bitWriter.write(bitSet(this.pubPurposesLITransparency), 24);
+        bitWriter.write(this.pubPurposesConsent, 24);
+        bitWriter.write(this.pubPurposesLITransparency, 24);
         bitWriter.write(this.numberOfCustomPurposes, 6);
-        bitWriter.write(bitSet(this.customPurposesConsent), this.numberOfCustomPurposes);
-        bitWriter.write(bitSet(this.customPurposesLITransparency), this.numberOfCustomPurposes);
+        bitWriter.write(this.customPurposesConsent, this.numberOfCustomPurposes);
+        bitWriter.write(this.customPurposesLITransparency, this.numberOfCustomPurposes);
 
         return bitWriter.toBase64();
     }
 
-    private BitSet bitSet(IntIterable integers) {
-        if (integers == null) {
-            return EMPTY_BIT_SET;
-        }
-        IntIterator iterator = integers.intIterator();
-        BitSet bitSet = new BitSet();
-        while (iterator.hasNext()) {
-            bitSet.set(iterator.next() - 1);
-        }
-        return bitSet;
-    }
-
     private int max(IntIterable integers) {
-        return IntIterableUtils.toStream(integers)
-                .max().orElse(0);
+        return integers.toStream().max().orElse(0);
     }
 }
