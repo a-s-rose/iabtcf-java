@@ -238,7 +238,8 @@ public class TCStringEncoder {
         if (this.version == 1) {
             return encodeVersion1();
         } else if (this.version == 2) {
-            return Stream.of(encodeCoreString(), encodeDisclosedVendors(), encodeAllowedVendors(), encodePubPurposesConsent())
+            return Stream.of(encodeCoreString(), encodeDisclosedVendors(),
+                    encodeAllowedVendors(), encodePubPurposesConsent())
                     .filter(Objects::nonNull)
                     .collect(Collectors.joining("."));
 
