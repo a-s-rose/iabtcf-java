@@ -9,9 +9,9 @@ package com.iabtcf.decoder;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,6 +24,8 @@ import java.util.Base64;
 
 import com.iabtcf.ByteBitVector;
 import com.iabtcf.FieldDefs;
+import com.iabtcf.exceptions.ByteParseException;
+import com.iabtcf.exceptions.UnsupportedVersionException;
 
 class TCStringDecoder {
     static ByteBitVector vectorFromString(String base64UrlEncodedString) {
@@ -35,7 +37,13 @@ class TCStringDecoder {
         return new ByteBitVector(bytes);
     }
 
-    public static TCString decode(String consentString) {
+    /**
+     * @throws ByteParseException if version field failed to parse
+     * @throws UnsupportedVersionException invalid version field
+     * @throws IllegalArgumentException if consentString is not in valid Base64 scheme
+     */
+    public static TCString decode(String consentString)
+            throws IllegalArgumentException, ByteParseException, UnsupportedVersionException {
         String[] split = consentString.split("\\.");
         String base64UrlEncodedString = split[0];
         ByteBitVector bitVector = vectorFromString(base64UrlEncodedString);
@@ -56,7 +64,7 @@ class TCStringDecoder {
                     return TCStringV2.fromBitVector(bitVector);
                 }
             default:
-                throw new UnsupportedOperationException("Version " + version + "is unsupported yet");
+                throw new UnsupportedVersionException("Version " + version + "is unsupported yet");
         }
     }
 }
