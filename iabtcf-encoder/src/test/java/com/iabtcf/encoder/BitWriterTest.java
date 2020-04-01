@@ -36,6 +36,7 @@ import org.junit.Test;
 import com.iabtcf.BitReader;
 import com.iabtcf.FieldDefs;
 import com.iabtcf.decoder.TCString;
+import com.iabtcf.encoder.exceptions.ValueOverflowException;
 import com.iabtcf.utils.BitReaderUtils;
 import com.iabtcf.utils.BitSetIntIterable;
 
@@ -91,7 +92,7 @@ public class BitWriterTest {
 
     @Test
     public void testEncodeIntIterableSmallerSize() {
-        BitSetIntIterable bsii = BitSetIntIterable.of(1, 15, 512);
+        BitSetIntIterable bsii = BitSetIntIterable.from(1, 15, 512);
         BitWriter bw = new BitWriter();
         bw.write(bsii, 12);
         byte[] b = bw.toByteArray();
@@ -101,7 +102,7 @@ public class BitWriterTest {
 
     @Test
     public void testEncodeIntIterableEqualSize() {
-        BitSetIntIterable bsii = BitSetIntIterable.of(1, 15, 512);
+        BitSetIntIterable bsii = BitSetIntIterable.from(1, 15, 512);
         BitWriter bw = new BitWriter();
         bw.write(bsii, 15);
         byte[] b = bw.toByteArray();
@@ -112,7 +113,7 @@ public class BitWriterTest {
 
     @Test
     public void testEncodeIntIterableLargerSize() {
-        BitSetIntIterable bsii = BitSetIntIterable.of(1, 15, 512);
+        BitSetIntIterable bsii = BitSetIntIterable.from(1, 15, 512);
         BitWriter bw = new BitWriter();
         bw.write(bsii, 1024);
         byte[] b = bw.toByteArray();
@@ -124,7 +125,7 @@ public class BitWriterTest {
 
     @Test
     public void testBitSetRespectsPadding() {
-        BitSetIntIterable bsii = BitSetIntIterable.of(1, 15, 512);
+        BitSetIntIterable bsii = BitSetIntIterable.from(1, 15, 512);
         BitWriter bw = new BitWriter();
         bw.write(bsii, 1024);
         byte[] b = bw.toByteArray();
@@ -141,7 +142,7 @@ public class BitWriterTest {
 
     @Test
     public void testCountsForPadding() {
-        BitSetIntIterable bsii = BitSetIntIterable.of(1, 15, 512);
+        BitSetIntIterable bsii = BitSetIntIterable.from(1, 15, 512);
         BitWriter bw = new BitWriter(1024 + 512);
         bw.write(bsii, 784);
         bw.write(bsii, 128);
@@ -276,10 +277,10 @@ public class BitWriterTest {
         bw.write(18, FieldDefs.CORE_CONSENT_SCREEN);
         bw.write("EN", FieldDefs.CORE_CONSENT_LANGUAGE);
         bw.write(150, FieldDefs.CORE_VENDOR_LIST_VERSION);
-        bw.write(BitSetIntIterable.of(1, 2, 3, 4, 5, 15, 24), FieldDefs.V1_PURPOSES_ALLOW);
+        bw.write(BitSetIntIterable.from(1, 2, 3, 4, 5, 15, 24), FieldDefs.V1_PURPOSES_ALLOW);
         bw.write(32, FieldDefs.V1_VENDOR_MAX_VENDOR_ID);
         bw.write(false);
-        bw.write(BitSetIntIterable.of(1, 25, 30), 32);
+        bw.write(BitSetIntIterable.from(1, 25, 30), 32);
 
         byte[] rv = bw.toByteArray();
         String str = Base64.getUrlEncoder().encodeToString(rv);
@@ -305,9 +306,9 @@ public class BitWriterTest {
 
         BitWriter bwB = new BitWriter();
         bwB.write(false, FieldDefs.CORE_USE_NON_STANDARD_STOCKS);
-        bwB.write(BitSetIntIterable.of(1), FieldDefs.CORE_SPECIAL_FEATURE_OPT_INS);
-        bwB.write(BitSetIntIterable.of(2, 10), FieldDefs.CORE_PURPOSES_CONSENT);
-        bwB.write(BitSetIntIterable.of(2, 9), FieldDefs.CORE_PURPOSES_LI_TRANSPARENCY);
+        bwB.write(BitSetIntIterable.from(1), FieldDefs.CORE_SPECIAL_FEATURE_OPT_INS);
+        bwB.write(BitSetIntIterable.from(2, 10), FieldDefs.CORE_PURPOSES_CONSENT);
+        bwB.write(BitSetIntIterable.from(2, 9), FieldDefs.CORE_PURPOSES_LI_TRANSPARENCY);
 
         BitWriter bwC = new BitWriter(
                 FieldDefs.CORE_PURPOSE_ONE_TREATMENT.getLength() + FieldDefs.CORE_PUBLISHER_CC.getLength());
@@ -424,5 +425,11 @@ public class BitWriterTest {
         assertEquals(128, bw.length());
         bw.write("hello");
         assertEquals(128, bw.length());
+    }
+
+    @Test(expected = ValueOverflowException.class)
+    public void testWriteV() {
+        BitWriter bw = new BitWriter(128);
+        bw.writeV(64, FieldDefs.CHAR);
     }
 }

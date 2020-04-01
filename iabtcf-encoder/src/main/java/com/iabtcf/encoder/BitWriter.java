@@ -29,6 +29,7 @@ import java.util.BitSet;
 import java.util.PrimitiveIterator.OfLong;
 
 import com.iabtcf.FieldDefs;
+import com.iabtcf.encoder.exceptions.ValueOverflowException;
 import com.iabtcf.utils.IntIterable;
 import com.iabtcf.utils.IntIterator;
 
@@ -84,7 +85,7 @@ class BitWriter {
         assert Charset.forName("US-ASCII").newEncoder().canEncode(str);
         byte[] b = str.toUpperCase().getBytes(StandardCharsets.US_ASCII);
         for (int i = 0; i < b.length; i++) {
-            write(b[i] - 'A', FieldDefs.CHAR);
+            writeV(b[i] - 'A', FieldDefs.CHAR);
         }
     }
 
@@ -131,9 +132,15 @@ class BitWriter {
             if (nextInt <= 0) {
                 throw new IndexOutOfBoundsException("invalid index: " + nextInt);
             }
+
+            if (nextInt > length) {
+                // we continue here, can't assume IntIterable is in sorted order
+                continue;
+            }
+
             bs.set(nextInt - 1);
         }
-        for (int i = 0; i < Math.min(length, bs.length()); i++) {
+        for (int i = 0; i < length; i++) {
             bw.write(bs.get(i));
         }
         write(bw);
@@ -158,6 +165,16 @@ class BitWriter {
      */
     public void write(long data, FieldDefs field) {
         write(data, field.getLength());
+    }
+
+    /**
+     * Writes up 'field' length number of bits from 'data', checking for boundary.
+     *
+     * @throws ValueOverflowException if i cannot be encoded by field#getLength number of bits.
+     */
+    public void writeV(long i, FieldDefs field) {
+        Bounds.checkBounds(i, field);
+        write(i, field);
     }
 
     /**

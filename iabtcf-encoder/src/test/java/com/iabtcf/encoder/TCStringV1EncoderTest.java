@@ -22,6 +22,9 @@ package com.iabtcf.encoder;
 
 import static com.iabtcf.encoder.utils.TestUtils.toDeci;
 import static com.iabtcf.test.utils.IntIterableMatcher.matchInts;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -36,6 +39,12 @@ import com.iabtcf.utils.BitSetIntIterable;
 public class TCStringV1EncoderTest {
 
     @Test
+    public void testEncodeDefault() {
+        String tcf = TCStringEncoder.newBuilder().version(1).encode();
+        assertEquals(1, TCString.decode(tcf).getVersion());
+    }
+
+    @Test
     public void testCanEncodeV1String() {
         BitSet purposeConsent = new BitSet();
         purposeConsent.set(1);
@@ -48,18 +57,19 @@ public class TCStringV1EncoderTest {
         Instant created = Instant.now();
         Instant updated = created.plus(1, ChronoUnit.HOURS);
 
-        String str = TCStringEncoder.newBuilder()
-                .withVersion(1)
-                .withCmpId(2)
-                .withCreated(created)
-                .withLastUpdated(updated)
-                .withCmpVersion(3)
-                .withConsentScreen(4)
-                .withConsentLanguage("DE")
-                .withVendorListVersion(5)
-                .withPurposesConsent(new BitSetIntIterable(purposeConsent))
-                .withVendorsConsent(new BitSetIntIterable(vendorConsent))
-                .toTCFFormat();
+        TCStringEncoder tcStrE = TCStringEncoder.newBuilder()
+            .version(1)
+            .cmpId(2)
+            .created(created)
+            .lastUpdated(updated)
+            .cmpVersion(3)
+            .consentScreen(4)
+            .consentLanguage("DE")
+            .vendorListVersion(5)
+            .addPurposesConsent(BitSetIntIterable.from(purposeConsent))
+            .addVendorConsent(BitSetIntIterable.from(vendorConsent));
+
+        String str = tcStrE.encode();
 
         TCString decodedTCString = TCString.decode(str);
         Assert.assertEquals(1, decodedTCString.getVersion());
@@ -71,6 +81,29 @@ public class TCStringV1EncoderTest {
         Assert.assertEquals("DE", decodedTCString.getConsentLanguage());
         Assert.assertThat(decodedTCString.getVendorConsent(), matchInts(1, 2, 8));
         Assert.assertThat(decodedTCString.getPurposesConsent(), matchInts(1));
+
+        assertEquals(decodedTCString, tcStrE.toTCString());
+    }
+
+    @Test
+    public void testDefaultConsent() {
+        Instant created = Instant.now();
+        Instant updated = created.plus(1, ChronoUnit.HOURS);
+
+        TCStringEncoder tcStrE = TCStringEncoder.newBuilder()
+            .version(1)
+            .cmpId(2)
+            .created(created)
+            .lastUpdated(updated)
+            .cmpVersion(3)
+            .consentScreen(4)
+            .consentLanguage("DE")
+            .vendorListVersion(5)
+            .defaultConsent(true)
+            .addVendorConsent(30);
+
+        assertTrue(tcStrE.toTCString().getVendorConsent().contains(2));
+        assertFalse(tcStrE.toTCString().getVendorConsent().contains(30));
     }
 
 }

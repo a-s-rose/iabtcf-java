@@ -35,9 +35,11 @@ class VendorFieldEncoder {
     private int maxVendorId;
     private boolean defaultConsent;
     private boolean emitRangeEncoding;
+    private boolean emitMaxVendorId;
+    private boolean emitIsRangeEncoding;
 
     public VendorFieldEncoder() {
-        this(new BitSet(), 0, false, false);
+        this(new BitSet(), 0, false, false, true, true);
     }
 
     public VendorFieldEncoder(VendorFieldEncoder prototype) {
@@ -46,22 +48,44 @@ class VendorFieldEncoder {
                         prototype.vendors.length()),
                 prototype.maxVendorId,
                 prototype.defaultConsent,
-                prototype.emitRangeEncoding);
+                prototype.emitRangeEncoding,
+                prototype.emitMaxVendorId,
+                prototype.emitIsRangeEncoding);
     }
 
-    private VendorFieldEncoder(BitSet vendors, int maxVendorId, boolean defaultConsent, boolean emitRangeEncoding) {
+    private VendorFieldEncoder(BitSet vendors, int maxVendorId, boolean defaultConsent, boolean emitRangeEncoding,
+            boolean emitMaxVendorId, boolean emitIsRangeEncoding) {
         this.vendors = vendors;
         this.maxVendorId = maxVendorId;
         this.defaultConsent = defaultConsent;
         this.emitRangeEncoding = emitRangeEncoding;
+        this.emitMaxVendorId = emitMaxVendorId;
+        this.emitIsRangeEncoding = emitIsRangeEncoding;
     }
 
     /**
-     * Emit range encoding even if it consumes more bits than bitfield encoding.
+     * Whether to force range encoding even if it consumes more bits than bit field encoding.
      */
     public VendorFieldEncoder emitRangeEncoding(boolean value) {
         this.emitRangeEncoding = value;
+        return this;
+    }
 
+    /**
+     * Whether to emit the maximum Vendor ID in this encoding. This should be set to false when encoding
+     * PublisherRestriction segment.
+     */
+    public VendorFieldEncoder emitMaxVendorId(boolean value) {
+        this.emitMaxVendorId = value;
+        return this;
+    }
+
+    /**
+     * Whether to emit the IsRangeEncoding flag. When set to false, the field is not encoded. This
+     * should be set to false when encoding PublisherRestriction section.
+     */
+    public VendorFieldEncoder emitIsRangeEncoding(boolean value) {
+        this.emitIsRangeEncoding = value;
         return this;
     }
 
@@ -136,7 +160,7 @@ class VendorFieldEncoder {
         BitWriter bv = new BitWriter();
 
         if (vendors.length() == 0) {
-            bv.write(0, FieldDefs.CORE_VENDOR_MAX_VENDOR_ID);
+            bv.writeV(0, FieldDefs.CORE_VENDOR_MAX_VENDOR_ID);
             bv.write(false, FieldDefs.CORE_VENDOR_IS_RANGE_ENCODING);
             return bv;
         }
@@ -154,26 +178,32 @@ class VendorFieldEncoder {
 
             if (length == 1) {
                 rangeBits.write(false, FieldDefs.CORE_VENDOR_IS_RANGE_ENCODING);
-                rangeBits.write(idxSet + 1, FieldDefs.START_OR_ONLY_VENDOR_ID);
+                rangeBits.writeV(idxSet + 1, FieldDefs.START_OR_ONLY_VENDOR_ID);
             } else {
                 rangeBits.write(true, FieldDefs.CORE_VENDOR_IS_RANGE_ENCODING);
-                rangeBits.write(idxSet + 1, FieldDefs.START_OR_ONLY_VENDOR_ID);
-                rangeBits.write(idxClr, FieldDefs.END_VENDOR_ID);
+                rangeBits.writeV(idxSet + 1, FieldDefs.START_OR_ONLY_VENDOR_ID);
+                rangeBits.writeV(idxClr, FieldDefs.END_VENDOR_ID);
             }
             numEntries++;
         } while ((idxSet = vendors.nextSetBit(idxClr)) > 0
                 && (rangeBits.length() < vendors.length() || emitRangeEncoding));
 
         // emit max vendor id
-        bv.write(maxVendorId, FieldDefs.CORE_VENDOR_MAX_VENDOR_ID);
+        if (emitMaxVendorId) {
+            bv.writeV(maxVendorId, FieldDefs.CORE_VENDOR_MAX_VENDOR_ID);
+        }
 
         if (rangeBits.length() < vendors.length() || emitRangeEncoding) {
             // emit range bits
-            bv.write(true, FieldDefs.IS_A_RANGE);
+
+            // don't emit IS_A_RANGE when we forced a range encoding
+            if (emitIsRangeEncoding) {
+                bv.write(true, FieldDefs.IS_A_RANGE);
+            }
             if (emitDefaultConsent) {
                 bv.write(defaultConsent, FieldDefs.V1_VENDOR_DEFAULT_CONSENT);
             }
-            bv.write(numEntries, FieldDefs.NUM_ENTRIES);
+            bv.writeV(numEntries, FieldDefs.NUM_ENTRIES);
             bv.write(rangeBits);
         } else {
             // emit bit field
