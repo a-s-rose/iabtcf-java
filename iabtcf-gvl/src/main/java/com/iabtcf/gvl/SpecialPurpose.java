@@ -1,8 +1,8 @@
-package com.iabtcf.encoder.utils;
+package com.iabtcf.gvl;
 
 /*-
  * #%L
- * IAB TCF Core Library
+ * IAB TCF Java GVL
  * %%
  * Copyright (C) 2020 IAB Technology Laboratory, Inc
  * %%
@@ -20,12 +20,9 @@ package com.iabtcf.encoder.utils;
  * #L%
  */
 
-import java.time.Instant;
-
-public class TestUtils {
-
-    public static Instant toDeci(Instant instant) {
-       return Instant.ofEpochMilli((instant.toEpochMilli() / 100) * 100);
-    }
+/**
+ * A special purpose declared as performed on the legal basis of a legitimate interest
+ */
+public interface SpecialPurpose extends Purpose {
 
 }

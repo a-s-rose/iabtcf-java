@@ -65,7 +65,6 @@ import java.util.Optional;
 import com.iabtcf.BitReader;
 import com.iabtcf.FieldDefs;
 import com.iabtcf.exceptions.InvalidRangeFieldException;
-import com.iabtcf.utils.BitReaderUtils;
 import com.iabtcf.utils.BitSetIntIterable;
 import com.iabtcf.utils.IntIterable;
 import com.iabtcf.v2.PublisherRestriction;
@@ -187,8 +186,10 @@ class TCStringV2 implements TCString {
 
                 if (startOrOnlyVendorId > endVendorId) {
                     throw new InvalidRangeFieldException(String.format(
-                            "start vendor id (%d) is greater than endVendorId (%d)", startOrOnlyVendorId, endVendorId));
+                            "start vendor id (%d) is greater than endVendorId (%d)", startOrOnlyVendorId,
+                            endVendorId));
                 }
+
                 if (endVendorId > maxV) {
                     throw new InvalidRangeFieldException(
                             String.format("end vendor id (%d) is greater than max (%d)", endVendorId, maxV));
@@ -300,7 +301,7 @@ class TCStringV2 implements TCString {
     @Override
     public String getConsentLanguage() {
         if (cache.add(CORE_CONSENT_LANGUAGE)) {
-            consentLanguage = BitReaderUtils.readStr2(bbv, CORE_CONSENT_LANGUAGE);
+            consentLanguage = bbv.readStr2(CORE_CONSENT_LANGUAGE);
         }
         return consentLanguage;
     }
@@ -388,7 +389,7 @@ class TCStringV2 implements TCString {
     @Override
     public String getPublisherCC() {
         if (cache.add(CORE_PUBLISHER_CC)) {
-            publisherCountryCode = BitReaderUtils.readStr2(bbv, CORE_PUBLISHER_CC);
+            publisherCountryCode = bbv.readStr2(CORE_PUBLISHER_CC);
         }
         return publisherCountryCode;
     }
@@ -536,5 +537,62 @@ class TCStringV2 implements TCString {
                 && Objects.equals(getVendorConsent(), other.getVendorConsent())
                 && Objects.equals(getVendorLegitimateInterest(), other.getVendorLegitimateInterest())
                 && getVendorListVersion() == other.getVendorListVersion() && getVersion() == other.getVersion();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("TCStringV2 [getVersion()=");
+        builder.append(getVersion());
+        builder.append(", getCreated()=");
+        builder.append(getCreated());
+        builder.append(", getLastUpdated()=");
+        builder.append(getLastUpdated());
+        builder.append(", getCmpId()=");
+        builder.append(getCmpId());
+        builder.append(", getCmpVersion()=");
+        builder.append(getCmpVersion());
+        builder.append(", getConsentScreen()=");
+        builder.append(getConsentScreen());
+        builder.append(", getConsentLanguage()=");
+        builder.append(getConsentLanguage());
+        builder.append(", getVendorListVersion()=");
+        builder.append(getVendorListVersion());
+        builder.append(", getTcfPolicyVersion()=");
+        builder.append(getTcfPolicyVersion());
+        builder.append(", isServiceSpecific()=");
+        builder.append(isServiceSpecific());
+        builder.append(", getUseNonStandardStacks()=");
+        builder.append(getUseNonStandardStacks());
+        builder.append(", getSpecialFeatureOptIns()=");
+        builder.append(getSpecialFeatureOptIns());
+        builder.append(", getPurposesConsent()=");
+        builder.append(getPurposesConsent());
+        builder.append(", getPurposesLITransparency()=");
+        builder.append(getPurposesLITransparency());
+        builder.append(", getPurposeOneTreatment()=");
+        builder.append(getPurposeOneTreatment());
+        builder.append(", getPublisherCC()=");
+        builder.append(getPublisherCC());
+        builder.append(", getVendorConsent()=");
+        builder.append(getVendorConsent());
+        builder.append(", getVendorLegitimateInterest()=");
+        builder.append(getVendorLegitimateInterest());
+        builder.append(", getPublisherRestrictions()=");
+        builder.append(getPublisherRestrictions());
+        builder.append(", getDisclosedVendors()=");
+        builder.append(getDisclosedVendors());
+        builder.append(", getAllowedVendors()=");
+        builder.append(getAllowedVendors());
+        builder.append(", getPubPurposesConsent()=");
+        builder.append(getPubPurposesConsent());
+        builder.append(", getPubPurposesLITransparency()=");
+        builder.append(getPubPurposesLITransparency());
+        builder.append(", getCustomPurposesConsent()=");
+        builder.append(getCustomPurposesConsent());
+        builder.append(", getCustomPurposesLITransparency()=");
+        builder.append(getCustomPurposesLITransparency());
+        builder.append("]");
+        return builder.toString();
     }
 }

@@ -37,7 +37,6 @@ import com.iabtcf.BitReader;
 import com.iabtcf.FieldDefs;
 import com.iabtcf.decoder.TCString;
 import com.iabtcf.encoder.exceptions.ValueOverflowException;
-import com.iabtcf.utils.BitReaderUtils;
 import com.iabtcf.utils.BitSetIntIterable;
 
 public class BitWriterTest {
@@ -223,7 +222,7 @@ public class BitWriterTest {
         bitWriter.write(str);
 
         BitReader reader = new BitReader(bitWriter.toByteArray());
-        String actual = BitReaderUtils.readStr2(reader, 0);
+        String actual = reader.readStr2(0);
         assertEquals(str, actual);
     }
 

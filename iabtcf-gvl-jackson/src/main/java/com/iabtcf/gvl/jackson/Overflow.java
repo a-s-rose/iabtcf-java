@@ -1,8 +1,8 @@
-package com.iabtcf.utils;
+package com.iabtcf.gvl.jackson;
 
 /*-
  * #%L
- * IAB TCF Core Library
+ * IAB TCF Java GVL Jackson
  * %%
  * Copyright (C) 2020 IAB Technology Laboratory, Inc
  * %%
@@ -20,23 +20,17 @@ package com.iabtcf.utils;
  * #L%
  */
 
-import java.time.Instant;
 
-import com.iabtcf.BitReader;
-import com.iabtcf.FieldDefs;
+public class Overflow implements com.iabtcf.gvl.Overflow {
 
-public class BitReaderUtils {
+    private int httpGetLimit;
 
-    public static Instant deciSeconds(BitReader bv, FieldDefs field) {
-        return Instant.ofEpochMilli(bv.readBits36(field.getOffset(bv)) * 100);
-    }
-
-    public static String readStr2(BitReader bv, int offset) {
-        return String
-                .valueOf(new char[] {(char) ('A' + bv.readBits6(offset)), (char) ('A' + bv.readBits6(offset + 6))});
-    }
-
-    public static String readStr2(BitReader bv, FieldDefs field) {
-        return readStr2(bv, field.getOffset(bv));
+    /**
+     * The vendor's http GET request length limit; 32 or 128 are the only supported options
+     *
+     * @return vendor's http GET request length limit
+     */
+    public int getHttpGetLimit() {
+        return httpGetLimit;
     }
 }

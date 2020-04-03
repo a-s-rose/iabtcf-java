@@ -69,7 +69,8 @@ public class BitReader {
         }
 
         if (is == null) {
-            throw new ByteParseException(String.format("read index %d out of bounds %d", offset, buffer.length));
+            throw new ByteParseException(String.format("read %d bytes at index %d out of bounds for buffer length %d",
+                    length, offset, buffer.length));
         }
 
         ensureCapacity(tlength);
@@ -89,6 +90,15 @@ public class BitReader {
         }
 
         return true;
+    }
+
+    public String readStr2(int offset) {
+        return String
+            .valueOf(new char[] {(char) ('A' + readBits6(offset)), (char) ('A' + readBits6(offset + 6))});
+    }
+
+    public String readStr2(FieldDefs field) {
+        return readStr2(field.getOffset(this));
     }
 
     /**
